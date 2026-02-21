@@ -108,6 +108,20 @@
       font-size: 1.2em;
       text-shadow: 0 2px 8px rgba(244,114,182,0.5);
     }
+    /* highlight the WHOLE target word */
+    .sentence-text .target-word {
+      background: linear-gradient(135deg, #fde047cc, #f472b6aa);
+      border-radius: 10px;
+      padding: 2px 8px;
+      display: inline-block;
+      box-shadow: 0 2px 10px rgba(244,114,182,0.45);
+      animation: wordPulse 1s ease-in-out infinite alternate;
+      border: 2px solid rgba(244,114,182,0.5);
+    }
+    @keyframes wordPulse {
+      from { transform: scale(1);    box-shadow: 0 2px 10px rgba(244,114,182,0.4); }
+      to   { transform: scale(1.06); box-shadow: 0 4px 18px rgba(244,114,182,0.7); }
+    }
 
     /* ─── TYPE INPUT ─── */
     .type-area {
@@ -200,12 +214,12 @@
     .particle {
       position: absolute;
       font-size: 2rem;
-      animation: flyUp 1.2s ease-out forwards;
+      animation: flyUp 1.6s ease-out forwards;
       user-select: none;
     }
     @keyframes flyUp {
       0%   { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-180px) scale(1.5) rotate(30deg); opacity: 0; }
+      100% { transform: translateY(-220px) scale(1.6) rotate(30deg); opacity: 0; }
     }
 
     /* special animation overlays */
@@ -217,7 +231,7 @@
       justify-content: center;
       z-index: 1000;
       pointer-events: none;
-      animation: fadeOverlay 1.8s ease-in-out forwards;
+      animation: fadeOverlay 2.2s ease-in-out forwards;
     }
     @keyframes fadeOverlay {
       0%   { opacity: 0; }
@@ -228,7 +242,7 @@
     .overlay-emoji {
       font-size: clamp(5rem, 20vw, 12rem);
       animation: bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards,
-                 spinOut 1.8s ease-in-out forwards;
+                 spinOut 2.2s ease-in-out forwards;
       filter: drop-shadow(0 0 30px rgba(244,114,182,0.8));
     }
     @keyframes bounceIn {
@@ -257,7 +271,7 @@
     .star-burst {
       position: absolute;
       font-size: 2.5rem;
-      animation: starBurst 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+      animation: starBurst 1s cubic-bezier(0.34,1.56,0.64,1) forwards;
     }
     @keyframes starBurst {
       0%   { transform: scale(0) translate(0,0); opacity: 1; }
@@ -273,7 +287,7 @@
       width: 0;
       height: 0;
       border-radius: 50%;
-      animation: wave 1.2s ease-out forwards;
+      animation: wave 1.6s ease-out forwards;
       z-index: 998;
       pointer-events: none;
     }
@@ -299,10 +313,23 @@
       animation: regenbogen 2s linear infinite;
       margin-bottom: 16px;
     }
-    .finish-unicorn { font-size: clamp(4rem, 15vw, 8rem); animation: bounce 1s infinite alternate; }
-    @keyframes bounce {
-      from { transform: translateY(0); }
-      to   { transform: translateY(-16px); }
+    /* giant unicorn at the end */
+    .finish-unicorn-big {
+      font-size: clamp(7rem, 28vw, 18rem);
+      display: block;
+      animation: unicornEntrance 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards,
+                 unicornBounce 1.4s 0.8s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 40px rgba(176,111,216,0.7));
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    @keyframes unicornEntrance {
+      from { transform: scale(0) rotate(-30deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg);   opacity: 1; }
+    }
+    @keyframes unicornBounce {
+      from { transform: translateY(0)    scale(1);    }
+      to   { transform: translateY(-20px) scale(1.05); }
     }
     .finish-text {
       font-size: 1.3rem;
@@ -403,80 +430,80 @@
 
 <!-- finish screen (inside same card-like element) -->
 <div class="card finish-screen" id="finish-screen">
-  <div class="finish-unicorn">🦄</div>
+  <span class="finish-unicorn-big">🦄</span>
   <div class="finish-title">Super gemacht!</div>
   <div class="finish-text">
     Du hast alle Sätze gelesen!<br>
     Du bist eine echte Einhorn-Leserin! 🌈✨
   </div>
-  <div style="font-size:3rem; margin: 12px 0;">🎉🦋🌸💜⭐🎊</div>
+  <div style="font-size:3rem; margin: 12px 0;">🎉🦋🌸💜⭐🎊🦄🌈🎆🎇✨💫</div>
   <button class="btn-restart" onclick="restartGame()">Nochmal spielen 🦄</button>
 </div>
 
 <script>
 // ─────────────────────────────────────────────────
-//  STORY DATA  (focus: letter B, simple words)
+//  STORY DATA  (Bellas Geburtstag – focus: letter B)
 // ─────────────────────────────────────────────────
 const sentences = [
   {
-    text: "Ein Einhorn heißt Bella.",
+    text: "Heute hat Bella Geburtstag.",
     typeWord: "Bella",
-    hint: "Das Einhorn hat einen Namen mit B!"
+    hint: "Das Einhorn heißt...?"
   },
   {
-    text: "Bella ist blau und pink.",
+    text: "Bella bekommt bunte Ballons.",
+    typeWord: "Ballons",
+    hint: "Die fliegen hoch! Fängt mit B an!"
+  },
+  {
+    text: "Die Ballons sind blau und pink.",
     typeWord: "blau",
-    hint: "Welche Farbe beginnt mit B?"
+    hint: "Eine Farbe – fängt mit B an!"
   },
   {
-    text: "Bella hat ein buntes Horn.",
-    typeWord: "buntes",
-    hint: "Bunt – das klingt wie B!"
+    text: "Bea backt einen leckeren Kuchen.",
+    typeWord: "backt",
+    hint: "Was macht Bea in der Küche? Mit B!"
   },
   {
-    text: "Sie badet im See.",
-    typeWord: "badet",
-    hint: "Baden macht Spaß! B am Anfang!"
+    text: "Der Kuchen hat bunte Bonbons drauf.",
+    typeWord: "Bonbons",
+    hint: "Die schmecken süß – fangen mit B an!"
   },
   {
-    text: "Der See ist blau wie der Himmel.",
-    typeWord: "blau",
-    hint: "Blau – alles mit B!"
+    text: "Bella bläst die Kerzen aus.",
+    typeWord: "bläst",
+    hint: "Was macht Bella? Fängt mit bl... an!"
   },
   {
-    text: "Bella hat eine beste Freundin.",
-    typeWord: "beste",
-    hint: "Beste Freundin – B am Anfang!"
+    text: "Alle spielen mit dem bunten Ball.",
+    typeWord: "Ball",
+    hint: "Was spielen sie? Mit B!"
   },
   {
-    text: "Die Freundin heißt Bea.",
+    text: "Bella bekommt ein Buch als Geschenk.",
+    typeWord: "Buch",
+    hint: "Was ist das Geschenk? Mit B!"
+  },
+  {
+    text: "Das Buch hat bunte Bilder drin.",
+    typeWord: "Bilder",
+    hint: "Was hat das Buch? Mit B!"
+  },
+  {
+    text: "Bella tanzt mit ihrer Freundin Bea.",
     typeWord: "Bea",
-    hint: "Bea – kurz und mit B!"
+    hint: "Wie heißt die Freundin? Mit B!"
   },
   {
-    text: "Bea bringt Blumen mit.",
-    typeWord: "Blumen",
-    hint: "Blumen beginnen mit Bl – und Bl beginnt mit B!"
+    text: "Bea schenkt Bella eine schöne Blume.",
+    typeWord: "Blume",
+    hint: "Was schenkt Bea? Mit B!"
   },
   {
-    text: "Die Blumen sind bunt und schön.",
-    typeWord: "bunt",
-    hint: "Bunt hat ein B am Anfang!"
-  },
-  {
-    text: "Bella und Bea backen einen Kuchen.",
-    typeWord: "backen",
-    hint: "Backen macht lecker – und beginnt mit B!"
-  },
-  {
-    text: "Der Kuchen hat bunte Sterne.",
-    typeWord: "bunte",
-    hint: "Bunte Sterne – B am Anfang!"
-  },
-  {
-    text: "Bella und Bea sind beste Freundinnen!",
-    typeWord: "beste",
-    hint: "Letzer Satz – du schaffst das! B für beste!"
+    text: "Bella hatte den besten Geburtstag!",
+    typeWord: "besten",
+    hint: "Wie war der Geburtstag? Mit B!"
   }
 ];
 
@@ -500,12 +527,14 @@ const animations = [
 
 let currentIndex = 0;
 let lastAnimIndex = -1;
+let answered = false;   // true once the current sentence was typed correctly
 
 // ─────────────────────────────────────────────────
 //  INIT
 // ─────────────────────────────────────────────────
 function init() {
   currentIndex = 0;
+  answered = false;
   showSentence();
   document.getElementById('type-input').focus();
 }
@@ -513,9 +542,22 @@ function init() {
 function showSentence() {
   const s = sentences[currentIndex];
   const raw = s.text;
+  answered = false;
 
-  // highlight every B/b
-  const highlighted = raw.replace(/([Bb])/g, '<span class="b-letter">$1</span>');
+  // Step 1: mark the target word with a placeholder (case-insensitive)
+  const escapedWord = s.typeWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const wordRegex = new RegExp('(' + escapedWord + ')', 'i');
+  let highlighted = raw.replace(wordRegex, '[[TW]]$1[[/TW]]');
+
+  // Step 2: highlight every B/b in the whole sentence
+  highlighted = highlighted.replace(/([Bb])/g, '<span class="b-letter">$1</span>');
+
+  // Step 3: replace placeholder with the target-word span
+  highlighted = highlighted.replace(
+    /\[\[TW\]\](.*?)\[\[\/TW\]\]/g,
+    '<span class="target-word">$1</span>'
+  );
+
   document.getElementById('sentence-display').innerHTML = highlighted;
 
   document.getElementById('type-input').value = '';
@@ -535,7 +577,12 @@ function showSentence() {
 // ─────────────────────────────────────────────────
 document.getElementById('type-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') {
-    checkInput();
+    if (answered) {
+      // already correct – go straight to next sentence
+      nextSentence();
+    } else {
+      checkInput();
+    }
   }
 });
 
@@ -556,10 +603,11 @@ function checkInput() {
   const target = sentences[currentIndex].typeWord;
 
   if (inp.toLowerCase() === target.toLowerCase()) {
+    answered = true;
     document.getElementById('type-input').classList.add('correct');
-    document.getElementById('hint-text').textContent = '🎉 Super! Klasse gemacht!';
+    document.getElementById('hint-text').textContent = '🎉 Super! Klasse gemacht! Drück Enter für weiter!';
     document.getElementById('btn-next').classList.add('visible');
-    playRandomAnimation();
+    celebrateSentence();
   } else {
     document.getElementById('type-input').classList.add('wrong');
     document.getElementById('type-input').classList.remove('correct');
@@ -604,6 +652,13 @@ function playRandomAnimation() {
   animations[idx]();
 }
 
+// Play 3 animations in sequence – more and longer party!
+function celebrateSentence() {
+  playRandomAnimation();
+  setTimeout(() => playRandomAnimation(), 1400);
+  setTimeout(() => playRandomAnimation(), 2900);
+}
+
 function clearLayer() {
   document.getElementById('anim-layer').innerHTML = '';
 }
@@ -614,28 +669,28 @@ function animRainbowWave() {
   const wave = document.createElement('div');
   wave.className = 'rainbow-wave';
   document.getElementById('anim-layer').appendChild(wave);
-  setTimeout(clearLayer, 1400);
+  setTimeout(clearLayer, 1800);
 }
 
-// 2. Confetti
+// 2. Confetti  (increased particle count and duration)
 function animConfetti() {
   clearLayer();
   const layer = document.getElementById('anim-layer');
   const colors = ['#b06fd8','#f472b6','#60a5fa','#fde047','#a78bfa','#34d399'];
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 120; i++) {
     const p = document.createElement('div');
     p.className = 'confetti-piece';
     p.style.left = Math.random() * 100 + 'vw';
     p.style.top = '-20px';
     p.style.background = colors[Math.floor(Math.random() * colors.length)];
-    p.style.width = (8 + Math.random() * 10) + 'px';
-    p.style.height = (8 + Math.random() * 10) + 'px';
+    p.style.width = (8 + Math.random() * 12) + 'px';
+    p.style.height = (8 + Math.random() * 12) + 'px';
     p.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
-    p.style.animationDuration = (1.2 + Math.random() * 1.8) + 's';
-    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
+    p.style.animationDelay = (Math.random() * 0.8) + 's';
     layer.appendChild(p);
   }
-  setTimeout(clearLayer, 3000);
+  setTimeout(clearLayer, 4500);
 }
 
 // 3. Star Burst from center
@@ -643,12 +698,12 @@ function animStarBurst() {
   clearLayer();
   const layer = document.getElementById('anim-layer');
   const emojis = ['⭐','✨','💫','🌟'];
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 24; i++) {
     const s = document.createElement('div');
     s.className = 'star-burst';
     s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    const angle = (i / 16) * 360;
-    const dist = 120 + Math.random() * 80;
+    const angle = (i / 24) * 360;
+    const dist = 130 + Math.random() * 100;
     const dx = Math.cos(angle * Math.PI / 180) * dist + 'px';
     const dy = Math.sin(angle * Math.PI / 180) * dist + 'px';
     s.style.setProperty('--dx', dx);
@@ -658,25 +713,25 @@ function animStarBurst() {
     s.style.animationDelay = (Math.random() * 0.2) + 's';
     layer.appendChild(s);
   }
-  setTimeout(clearLayer, 1200);
+  setTimeout(clearLayer, 1500);
 }
 
 // 4. Floating Unicorns
 function animFloatUnicorns() {
   clearLayer();
   const layer = document.getElementById('anim-layer');
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 14; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     p.textContent = '🦄';
-    p.style.left = (10 + Math.random() * 80) + 'vw';
-    p.style.top = (50 + Math.random() * 40) + 'vh';
-    p.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
-    p.style.animationDuration = (0.9 + Math.random() * 0.8) + 's';
-    p.style.animationDelay = (Math.random() * 0.4) + 's';
+    p.style.left = (5 + Math.random() * 90) + 'vw';
+    p.style.top = (40 + Math.random() * 50) + 'vh';
+    p.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
+    p.style.animationDuration = (1.1 + Math.random() * 1) + 's';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
     layer.appendChild(p);
   }
-  setTimeout(clearLayer, 2000);
+  setTimeout(clearLayer, 2800);
 }
 
 // 5. Hearts
@@ -684,36 +739,36 @@ function animHearts() {
   clearLayer();
   const layer = document.getElementById('anim-layer');
   const hearts = ['💜','💗','💕','❤️','🩷','💙'];
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 20; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     p.textContent = hearts[Math.floor(Math.random() * hearts.length)];
     p.style.left = (5 + Math.random() * 90) + 'vw';
-    p.style.top = (30 + Math.random() * 60) + 'vh';
-    p.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
-    p.style.animationDuration = (1 + Math.random() * 0.8) + 's';
-    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.top = (20 + Math.random() * 70) + 'vh';
+    p.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+    p.style.animationDuration = (1.2 + Math.random() * 1) + 's';
+    p.style.animationDelay = (Math.random() * 0.6) + 's';
     layer.appendChild(p);
   }
-  setTimeout(clearLayer, 2200);
+  setTimeout(clearLayer, 3000);
 }
 
 // 6. Sparkles
 function animSparkles() {
   clearLayer();
   const layer = document.getElementById('anim-layer');
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 30; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     p.textContent = '✨';
     p.style.left = Math.random() * 100 + 'vw';
-    p.style.top = (20 + Math.random() * 70) + 'vh';
-    p.style.fontSize = (1 + Math.random() * 1.8) + 'rem';
-    p.style.animationDuration = (0.8 + Math.random() * 0.7) + 's';
-    p.style.animationDelay = (Math.random() * 0.4) + 's';
+    p.style.top = (10 + Math.random() * 80) + 'vh';
+    p.style.fontSize = (1 + Math.random() * 2.2) + 'rem';
+    p.style.animationDuration = (1 + Math.random() * 1) + 's';
+    p.style.animationDelay = (Math.random() * 0.5) + 's';
     layer.appendChild(p);
   }
-  setTimeout(clearLayer, 1800);
+  setTimeout(clearLayer, 2500);
 }
 
 // 7. Balloons
@@ -721,18 +776,18 @@ function animBalloons() {
   clearLayer();
   const layer = document.getElementById('anim-layer');
   const balloons = ['🎈','🎀','🎊','🎉'];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 16; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     p.textContent = balloons[Math.floor(Math.random() * balloons.length)];
     p.style.left = (5 + Math.random() * 90) + 'vw';
-    p.style.top = (60 + Math.random() * 30) + 'vh';
-    p.style.fontSize = (1.8 + Math.random() * 1.5) + 'rem';
-    p.style.animationDuration = (1.2 + Math.random() * 1) + 's';
-    p.style.animationDelay = (Math.random() * 0.5) + 's';
+    p.style.top = (50 + Math.random() * 40) + 'vh';
+    p.style.fontSize = (1.8 + Math.random() * 2) + 'rem';
+    p.style.animationDuration = (1.4 + Math.random() * 1.2) + 's';
+    p.style.animationDelay = (Math.random() * 0.6) + 's';
     layer.appendChild(p);
   }
-  setTimeout(clearLayer, 2500);
+  setTimeout(clearLayer, 3200);
 }
 
 // 8. Big Emoji Overlay
@@ -748,7 +803,7 @@ function animBigEmoji() {
   e.textContent = emoji;
   overlay.appendChild(e);
   document.getElementById('anim-layer').appendChild(overlay);
-  setTimeout(clearLayer, 1900);
+  setTimeout(clearLayer, 2400);
 }
 
 // 9. Fireworks
@@ -756,18 +811,18 @@ function animFireworks() {
   clearLayer();
   const layer = document.getElementById('anim-layer');
   const emojis = ['🎆','🎇','✨','💥','🌟'];
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < 22; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    p.style.left = (10 + Math.random() * 80) + 'vw';
-    p.style.top = (40 + Math.random() * 50) + 'vh';
-    p.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
-    p.style.animationDuration = (0.9 + Math.random() * 0.8) + 's';
-    p.style.animationDelay = (Math.random() * 0.6) + 's';
+    p.style.left = (5 + Math.random() * 90) + 'vw';
+    p.style.top = (20 + Math.random() * 70) + 'vh';
+    p.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
+    p.style.animationDuration = (1.1 + Math.random() * 1) + 's';
+    p.style.animationDelay = (Math.random() * 0.7) + 's';
     layer.appendChild(p);
   }
-  setTimeout(clearLayer, 2000);
+  setTimeout(clearLayer, 2800);
 }
 
 // 10. Bubbles
@@ -775,9 +830,9 @@ function animBubbles() {
   clearLayer();
   const layer = document.getElementById('anim-layer');
   const colors = ['#e9d5ff','#fce7f3','#bfdbfe','#fef9c3','#a5f3fc'];
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < 28; i++) {
     const b = document.createElement('div');
-    const size = 30 + Math.random() * 50;
+    const size = 30 + Math.random() * 60;
     b.style.cssText = `
       position: absolute;
       width: ${size}px;
@@ -786,13 +841,13 @@ function animBubbles() {
       background: ${colors[Math.floor(Math.random() * colors.length)]};
       border: 3px solid rgba(255,255,255,0.8);
       left: ${Math.random() * 100}vw;
-      top: ${40 + Math.random() * 50}vh;
+      top: ${30 + Math.random() * 60}vh;
       opacity: 0.8;
-      animation: flyUp ${0.8 + Math.random() * 1}s ease-out ${Math.random() * 0.5}s forwards;
+      animation: flyUp ${1 + Math.random() * 1.2}s ease-out ${Math.random() * 0.6}s forwards;
     `;
     layer.appendChild(b);
   }
-  setTimeout(clearLayer, 2200);
+  setTimeout(clearLayer, 3000);
 }
 
 // 11. Rainbow text
@@ -804,7 +859,7 @@ function animRainbow() {
     position: fixed; inset: 0;
     display: flex; align-items: center; justify-content: center;
     pointer-events: none;
-    animation: fadeOverlay 1.6s ease-in-out forwards;
+    animation: fadeOverlay 2s ease-in-out forwards;
     z-index: 1001;
   `;
   const txt = document.createElement('div');
@@ -823,7 +878,7 @@ function animRainbow() {
   txt.textContent = '🌈 Super! 🌈';
   overlay.appendChild(txt);
   layer.appendChild(overlay);
-  setTimeout(clearLayer, 1800);
+  setTimeout(clearLayer, 2200);
 }
 
 // 12. Magic sparkle circle
@@ -832,9 +887,9 @@ function animMagic() {
   const layer = document.getElementById('anim-layer');
   const cx = 50; const cy = 50;
   const moons = ['🌙','⭐','💫','✨','🌟','💜'];
-  for (let i = 0; i < 12; i++) {
-    const angle = (i / 12) * 360;
-    const r = 30 + Math.random() * 15;
+  for (let i = 0; i < 18; i++) {
+    const angle = (i / 18) * 360;
+    const r = 30 + Math.random() * 18;
     const x = cx + r * Math.cos(angle * Math.PI / 180);
     const y = cy + r * Math.sin(angle * Math.PI / 180);
     const p = document.createElement('div');
@@ -842,21 +897,30 @@ function animMagic() {
     p.textContent = moons[Math.floor(Math.random() * moons.length)];
     p.style.left = x + 'vw';
     p.style.top = y + 'vh';
-    p.style.fontSize = (1.2 + Math.random() * 1.2) + 'rem';
-    p.style.animationDuration = (0.8 + Math.random() * 0.6) + 's';
+    p.style.fontSize = (1.2 + Math.random() * 1.5) + 'rem';
+    p.style.animationDuration = (1 + Math.random() * 0.8) + 's';
     p.style.animationDelay = (Math.random() * 0.3) + 's';
     layer.appendChild(p);
   }
-  setTimeout(clearLayer, 1800);
+  setTimeout(clearLayer, 2400);
 }
 
-// Big finale on game finish
+// GAAAANZ viel Party am Ende mit großem Einhorn!
 function bigFinaleAnimation() {
   animConfetti();
-  setTimeout(animStarBurst, 400);
-  setTimeout(animFloatUnicorns, 800);
-  setTimeout(animHearts, 1400);
-  setTimeout(animSparkles, 2000);
+  setTimeout(animRainbowWave,  600);
+  setTimeout(animStarBurst,   1200);
+  setTimeout(animFloatUnicorns, 1800);
+  setTimeout(animHearts,       2600);
+  setTimeout(animFireworks,    3400);
+  setTimeout(animSparkles,     4200);
+  setTimeout(animBalloons,     5000);
+  setTimeout(animMagic,        5800);
+  setTimeout(animRainbow,      6600);
+  setTimeout(animConfetti,     7400);  // zweites Mal Konfetti!
+  setTimeout(animBigEmoji,     8200);
+  setTimeout(animFloatUnicorns,9000);  // nochmal Einhörner!
+  setTimeout(animStarBurst,    9800);
 }
 
 // ─────────────────────────────────────────────────
